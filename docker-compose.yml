@@ -18,7 +18,6 @@ services:
     restart: always
     ports:
       - 80:80
-
   mysql:
     image: mariadb:${MARIADB_VERSION:-latest}
     container_name: wordpress_mysql
@@ -30,7 +29,6 @@ services:
       - MYSQL_PASSWORD=${DATABASE_PASSWORD:-password}
       - MYSQL_DATABASE=${COMPOSE_PROJECT_NAME:-wordpress}
     restart: always
-
   phpmyadmin:
     depends_on:
       - mysql
@@ -42,7 +40,6 @@ services:
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}
-
   # Command line interface to wordpress
   wpcli:
     build: ./wpcli/
@@ -51,7 +48,6 @@ services:
     volumes:
       - ./wordpress:/var/www/html
     working_dir: /var/www/html
-
   # Check availability of essential services
   healthcheck:
     image: wpcli
