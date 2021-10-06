@@ -69,6 +69,6 @@
 </div><!-- #page -->
 
 <?php wp_footer(); ?>
-
+<script src="//code-sa1.jivosite.com/widget/njVubkjM2b" async></script>
 </body>
 </html>

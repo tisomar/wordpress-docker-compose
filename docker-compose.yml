@@ -1,10 +1,12 @@
 version: '3.6'
 services:
   wordpress:
-    image: wordpress:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: wordpress
     volumes:
-      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./config/php.ini:/usr/local/etc/php/conf.d/php.ini
       - ./wordpress:/var/www/html
     environment:
       - WORDPRESS_DB_NAME=${COMPOSE_PROJECT_NAME:-wordpress}

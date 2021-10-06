@@ -1,32 +1,18 @@
-FROM wordpress:5.6.2-php7.3-apache
-
+FROM wordpress:php7.1-apache
 WORKDIR /var/www/html
 
+# Habilitando o modo de reescrita do Apache
+RUN a2enmod rewrite
+
+RUN mkdir -p /etc/php/7.1/mods-available/
+
+# Install selected extensions and other stuff
 RUN apt-get update \
-    &&  apt-get -y install tzdata cron \
-    && a2enmod rewrite \
-    && apt-get install -y --no-install-recommends libpq-dev libicu-dev libzip-dev zip unzip git \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pgsql pdo pdo_pgsql \
-    && pecl install apcu xdebug \
-    && docker-php-ext-enable apcu xdebug \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && apt-get -y --no-install-recommends install  php-xdebug \
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
+    && pecl install xdebug-2.5.0 \
+    && docker-php-ext-enable xdebug
 
-RUN apt update \
-	&& apt -y install vim
-
-# Configurando o timezone do servidor
-RUN ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
-
-#RUN apt-get -y remove tzdata
-RUN rm -rf /var/cache/apk/*
-
-# Apache settings
-COPY ./config/php.conf.ini /usr/local/etc/php/conf.d/php.ini
-
-COPY wordpress/ /var/www/html/
-
-RUN chmod 777 -R /var/www/html/
+COPY ./wordpress /var/www/html
+COPY ./config/php.ini /usr/local/etc/php/php.ini
 EXPOSE 80
-CMD [ "sh", "-c", "cron -f" ]
