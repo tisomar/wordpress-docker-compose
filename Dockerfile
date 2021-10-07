@@ -15,4 +15,5 @@ RUN apt-get update \
 
 COPY ./wordpress /var/www/html
 COPY ./config/php.ini /usr/local/etc/php/php.ini
+RUN chmod 777 -R /var/www/html/
 EXPOSE 80
